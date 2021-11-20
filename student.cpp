@@ -130,6 +130,10 @@ int compareResearchScore(const Student&stu1, const Student&stu2){
 
 }
 
+void to_lowercase(string &s){
+	for (auto & c: s) c = (char)toupper(c);
+}
+
 //Function that compares First Names of two students 
 int compareFirstName(const Student&stu1, const Student&stu2){
 
@@ -138,7 +142,13 @@ int compareFirstName(const Student&stu1, const Student&stu2){
 }
 
 int compareProvince(const DomesticStudent& stu1, const DomesticStudent& stu2){
-    return stu2.get_province().compare(stu1.get_province());
+
+	string temp_stu1 = stu1.province;
+	to_lowercase(temp_stu1);
+	string temp_stu2 = stu2.province;
+	to_lowercase(temp_stu2);
+
+    return temp_stu1.compare(temp_stu2);
 }
 
 int compareCountry(const InternationalStudent& stu1, const InternationalStudent& stu2){
