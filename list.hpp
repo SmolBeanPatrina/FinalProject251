@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef list_hpp
 #define list_hpp
 
