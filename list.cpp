@@ -41,6 +41,7 @@ void DSLinkedList::RemoveTail(){
     }
 
 }
+
 void ISLinkedList::RemoveTail(){
     if(tail == NULL){
         return;
@@ -64,6 +65,28 @@ void ISLinkedList::RemoveTail(){
 
 }
 
+void SLinkedList::RemoveTail(){
+    if(tail == NULL){
+        return;
+    }
+    else{
+        Link<Student> * to_remove = tail;
+        if(head == tail){
+            head == NULL;
+            tail == NULL;
+        }else{
+
+            Link<Student> * previous = head;
+            while(previous->link != tail){
+                previous = previous->link;
+            }
+            tail = previous;
+            tail->link = NULL;
+        }
+        delete to_remove;
+    }
+
+}
 void ISLinkedList::RemoveHead(){
 
     if(head == NULL){
@@ -81,13 +104,51 @@ void ISLinkedList::RemoveHead(){
         }
         delete to_remove;
     }
+}
+void SLinkedList::RemoveHead(){
 
+    if(head == NULL){
+        return;
+    }
+    else{
+        Link<Student> * to_remove;
+        to_remove = head;
+        if(head == tail){
+            head == NULL;
+            tail == NULL;
+        }
+        else{
+            head = head->link;
+        }
+        delete to_remove;
+    }
 }
 
 DSLinkedList::DSLinkedList(){
     head = NULL;
     tail = NULL;
 }
+
+SLinkedList::SLinkedList(){
+    head = NULL;
+    tail = NULL;
+}
+void SLinkedList::Sort(){
+    MergeSort(&(head));
+    set_tail<SLinkedList, Student>(this);
+}
+void SLinkedList::AddNode(Student x){
+    push_node_to_list(this, x);
+    set_tail<SLinkedList, Student>(this);
+}
+void SLinkedList::print(){
+    Link<Student> * temp = head;
+    while(temp != NULL){
+        cout << temp->student;
+        temp = temp->link;
+    }
+}
+
 void DSLinkedList::Sort(){
     MergeSort(&(head));
     set_tail<DSLinkedList, DomesticStudent>(this);
@@ -99,29 +160,19 @@ void DSLinkedList::print(){
         temp = temp->link;
     }
 }
+
 void DSLinkedList::AddNode(DomesticStudent x){
     push_node_to_list(this, x);
+    Sort();
     set_tail<DSLinkedList, DomesticStudent>(this);
 }
 
 void ISLinkedList::AddNode(InternationalStudent x){
     push_node_to_list(this, x);
+    Sort();
+    set_tail<ISLinkedList, InternationalStudent>(this);
 }
-void ISLinkedList::ValidateT(){
-    Link<InternationalStudent> * temp = head;
-    int counter = 0;
-    vector<int> indices;
-    while(temp != NULL){
-        if(!(temp->student.valid_toefl())){
-            indices.push_back(counter);
-        }
-        temp = temp->link;
-        counter ++;
-    }
-    for(auto i : indices){
-        deleteNode<ISLinkedList, InternationalStudent>(*this, i);
-    }
-}
+
 void ISLinkedList::print(){
     Link<InternationalStudent> * temp = head;
     while(temp != NULL){
@@ -133,10 +184,28 @@ void ISLinkedList::print(){
 void ISLinkedList::Sort(){
     // ValidateT();
     MergeSort(&head);
+    set_tail<ISLinkedList, InternationalStudent>(this);
     
 }
 
 ISLinkedList::ISLinkedList(){
     head = NULL;
     tail = NULL;
+}
+
+void SLinkedList::MergeLists(DSLinkedList DList, ISLinkedList IList){
+    Link<DomesticStudent> * ds_head = DList.head;
+    Link<InternationalStudent> * is_head = IList.head;
+
+    while(ds_head != NULL){
+        AddNode(ds_head->student);
+        ds_head = ds_head->link;
+    }
+    while(is_head != NULL){
+        AddNode(is_head->student);
+        is_head = is_head->link;
+    }
+    
+    
+
 }

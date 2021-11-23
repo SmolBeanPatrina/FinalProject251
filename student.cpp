@@ -14,6 +14,7 @@ void Student::set_lname(string _lname){ last_name = _lname; }
 void Student::set_cgpa(float _cpga){ CGPA = _cpga; }
 void Student::set_res_score(int _score){ research_score = _score; }
 void Student::set_appid(int _id){ app_id = _id; }
+void Student::set_orig_type(int x) { orig_type = x; }
 
 // get and set functions for the extra domestic student paramenters
 string DomesticStudent::get_province() const{ return province; }
@@ -62,7 +63,7 @@ Student::Student(string _fname, string _lname, float _cgpa, int _score, int _id)
 DomesticStudent::DomesticStudent() : Student(){
 
   province = "none";
-
+  orig_type = 0;
 }
 
 // a constructor for the domestic student that inherits the 
@@ -70,16 +71,19 @@ DomesticStudent::DomesticStudent() : Student(){
 DomesticStudent::DomesticStudent(string _fname, string _lname, float _cgpa, int _score, int _id, string _province) : Student(_fname, _lname, _cgpa, _score, _id){
 
   province = _province;
-
+  orig_type = 0;
 }
 
 
+
+bool DomesticStudent::valid_toefl(){ return true; }
 InternationalStudent::InternationalStudent() : Student(){
 	toefl.listening = 0;
 	toefl.reading = 0;
 	toefl.speaking = 0;
 	toefl.writing = 0;
 	toefl.total_score = 0;
+	orig_type = 1;
 }
 // a constructor for the international student that inherits the 
 // student constructor but also sets the province to a passed in value
@@ -90,6 +94,7 @@ InternationalStudent::InternationalStudent(string _fname, string _lname, float _
   toefl.speaking = t_s;
   toefl.writing = t_w;
   toefl.total_score = t_r + t_l + t_s + t_w;
+  orig_type = 1;
 
 }
 
@@ -99,6 +104,22 @@ bool InternationalStudent::valid_toefl(){
 		return false;
 	}
 	return true;
+}
+
+int Student::get_orig_type() const{
+	return orig_type;
+}
+
+int compareLocation(const Student &stu1, const Student &stu2){
+
+	if(stu1.get_orig_type() == 0 && stu2.get_orig_type() == 1){
+		return -1;
+	}
+	if(stu1.get_orig_type() == 1 && stu2.get_orig_type() == 0){
+		return 1;
+	}
+	return 0;
+
 }
 
 
@@ -213,6 +234,8 @@ ostream& operator<<(ostream& outs, DomesticStudent& stu)
 
   return outs;
 }
+
+bool Student::valid_toefl() { return true; }
 
 //Function that overloads the << operator. This is for international students
 ostream& operator<<(ostream& outs, InternationalStudent& stu)

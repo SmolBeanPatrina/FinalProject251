@@ -126,16 +126,18 @@ int main()
     domestic_students.print();
     
     domestic_students.RemoveTail();
-    // domestic_students.RemoveHead();
-    // SearchName<DSLinkedList, DomesticStudent>(domestic_students, "Aurora Foster", true);
-    // domestic_students.Sort();
-    domestic_students.print();
-    
+
     InternationalFile.close();
 
     intern_students.Sort();
-    intern_students.ValidateT();
+
     intern_students.print();
+
+    SLinkedList students;
+
+    students.MergeLists(domestic_students, intern_students);
+    
+    students.print();
 
     return 0;
 }

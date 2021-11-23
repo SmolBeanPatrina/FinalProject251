@@ -16,18 +16,25 @@ class Student {
     string last_name;
     float CGPA;
     int research_score;
+    string home_location;
+    int orig_type = -1;
     int app_id = 20210000;
   public:
 
     Student(); //constructors
     Student(string _fname, string _lname, float _cpga, int _score, int _id);
 
+    int get_orig_type() const;
     string get_fname() const;   //get functions
     string get_lname() const; 
+    
+
     float get_cgpa() const;
     int get_res_score() const;
     int get_appid();    
+    bool valid_toefl();
 
+    void set_orig_type(int x);
     void set_fname(string _fname);  //set functions
     void set_lname(string _lname);
     void set_cgpa(float _cpga);
@@ -42,7 +49,9 @@ class Student {
     friend int compareCGPA(const Student&stu1, const Student&stu2); //Compares CGPA of two students         
     friend int compareResearchScore(const Student&stu1, const Student&stu2);//Compares Research Score of two students   
     friend int compareFirstName(const Student&stu1, const Student&stu2);//Compares First Names of two students   
-    friend int compareLastName(const Student&stu1, const Student&stu2);//Compares Last Names of two students   
+    friend int compareLastName(const Student&stu1, const Student&stu2);//Compares Last Names of two students
+    friend int compareLocation(const Student &stu1, const Student &stu2);
+    friend ostream& operator <<(ostream& outs, Student& stu);   
 
 };
 
@@ -55,6 +64,7 @@ class DomesticStudent : public Student {
     DomesticStudent(string _fname, string _lname, float _cgpa, int _score, int _id, string _province);
 
     string get_province() const;
+    bool valid_toefl();
     friend int compareProvince(const DomesticStudent &stu1, const DomesticStudent &stu2);
     friend int compareLocation(const DomesticStudent &stu1, const DomesticStudent &stu2);
     void set_province(string _province);
