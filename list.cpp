@@ -1,28 +1,36 @@
 #include "list.hpp"
 #include <iostream>
-#include <cmath>
+
 
 DSLinkedList::DSLinkedList(){
     head = NULL;
     tail = NULL;
 }
-
+void DSLinkedList::Sort(){
+    MergeSort(&(head));
+}
 void DSLinkedList::print(){
     Link<DomesticStudent> * temp = head;
-
     while(temp != NULL){
         cout << temp->student;
         temp = temp->link;
     }
-
 }
-
 void DSLinkedList::AddNode(DomesticStudent x){
-
-    x.set_cgpa(round((x.get_cgpa()*10))/10);
-    Link<DomesticStudent> * new_link = new Link<DomesticStudent>;
-    new_link->student = x;
-    new_link->link = head;
-    head = new_link;
+    push_node_to_list(this, x);
 }
 
+void ISLinkedList::AddNode(InternationalStudent x){
+    push_node_to_list(this, x);
+}
+void ISLinkedList::print(){
+    Link<InternationalStudent> * temp = head;
+    while(temp != NULL){
+        cout << temp->student;
+        temp = temp->link;
+    }
+}
+ISLinkedList::ISLinkedList(){
+    head = NULL;
+    tail = NULL;
+}

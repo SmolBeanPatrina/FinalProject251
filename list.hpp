@@ -1,8 +1,10 @@
 #ifndef list_hpp
+#define list_hpp
 
 #include "student.hpp"
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 template <class type>
 void SwapLinks(type &s1, type &s2)
@@ -21,18 +23,45 @@ struct Link
 
 class DSLinkedList
 {
-public:
-    Link<DomesticStudent> *head, *tail;
-    DSLinkedList();
-    void AddNode(DomesticStudent x);
-    void print();
+
+    private:
+        Link<DomesticStudent> *head, *tail;
+    public:
+        DSLinkedList();
+        void Sort();
+        void AddNode(DomesticStudent x);
+        void print();
+        template <class list_type, class type>
+        friend void push_node_to_list(list_type list, type x);
 };
 
-template <class type>
-type *MergeSorted(type *link1, type *link2, int mode)
+class ISLinkedList
 {
 
-    type *result = NULL;
+    private:
+        Link<InternationalStudent> *head, *tail;
+    public:
+        ISLinkedList();
+        void Sort();
+        void AddNode(InternationalStudent x);
+        void print();
+        template <class list_type, class type>
+        friend void push_node_to_list(list_type list, type x);
+};
+
+template <class list_type, class type>
+void push_node_to_list(list_type list, type x){
+
+    x.set_cgpa(round((x.get_cgpa()*10))/10);
+    Link<type> * new_link = new Link<type>;
+    new_link->student = x;
+    new_link->link = list->head;
+    list->head = new_link;
+}
+
+Link<DomesticStudent> *MergeSorted(Link<DomesticStudent> *link1, Link<DomesticStudent> *link2){
+
+    Link<DomesticStudent> *result = NULL;
 
     if (link1 == NULL)
     {
@@ -43,18 +72,18 @@ type *MergeSorted(type *link1, type *link2, int mode)
         return link1;
     }
 
-    if (mode == 1)
-    {
+
+    
         int research_compare = compareResearchScore(link1->student, link2->student);
         if (research_compare == 1)
         {
             result = link1;
-            result->link = MergeSorted(link1->link, link2, 1);
+            result->link = MergeSorted(link1->link, link2);
         }
         else if (research_compare == -1)
         {
             result = link2;
-            result->link = MergeSorted(link1, link2->link, 1);
+            result->link = MergeSorted(link1, link2->link);
         }
         else if (research_compare == 0)
         {
@@ -62,12 +91,12 @@ type *MergeSorted(type *link1, type *link2, int mode)
             if (cgpa_compare == 1)
             {
                 result = link1;
-                result->link = MergeSorted(link1->link, link2, 1);
+                result->link = MergeSorted(link1->link, link2);
             }
             else if (cgpa_compare == -1)
             {
                 result = link2;
-                result->link = MergeSorted(link1, link2->link, 1);
+                result->link = MergeSorted(link1, link2->link);
             }
             else if (cgpa_compare == 0)
             {
@@ -75,16 +104,16 @@ type *MergeSorted(type *link1, type *link2, int mode)
                 if (province_compare < 0)
                 {
                     result = link1;
-                    result->link = MergeSorted(link1->link, link2, 1);
+                    result->link = MergeSorted(link1->link, link2);
                 }
                 else if (province_compare > 0)
                 {
                     result = link2;
-                    result->link = MergeSorted(link1, link2->link, 1);
+                    result->link = MergeSorted(link1, link2->link);
                 }
             }
         }
-    }
+    
     return result;
 }
 
@@ -129,7 +158,7 @@ void MergeSort(type **thead)
     MergeSort(&ptr1);
     MergeSort(&ptr2);
 
-    *thead = MergeSorted(ptr1, ptr2, 1);
+    *thead = MergeSorted(ptr1, ptr2);
 }
 
 template <class list_type, class link_type>
