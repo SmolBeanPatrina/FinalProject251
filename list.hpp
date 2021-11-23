@@ -1,12 +1,9 @@
-#pragma once
-
 #ifndef list_hpp
 #define list_hpp
-
+#include <cmath>
 #include "student.hpp"
 #include <iostream>
 #include <vector>
-#include <cmath>
 
 template <class type>
 void SwapLinks(type &s1, type &s2)
@@ -27,43 +24,60 @@ class DSLinkedList
 {
 
     private:
-        Link<DomesticStudent> *head, *tail;
     public:
+        Link<DomesticStudent> *head, *tail;
         DSLinkedList();
         void Sort();
         void AddNode(DomesticStudent x);
         void print();
+        void RemoveHead();
+        void RemoveTail();
         template <class list_type, class type>
         friend void push_node_to_list(list_type list, type x);
 };
-
 class ISLinkedList
 {
 
     private:
-        Link<InternationalStudent> *head, *tail;
     public:
+        Link<InternationalStudent> *head, *tail;
         ISLinkedList();
         void Sort();
+        void ValidateT();
+        void RemoveHead();
+        void RemoveTail();
         void AddNode(InternationalStudent x);
         void print();
         template <class list_type, class type>
         friend void push_node_to_list(list_type list, type x);
 };
 
+template <class list_type, class link_type>
+void set_tail(list_type * list){
+    Link<link_type> * temp_link = list->head;
+    if(temp_link->link == NULL){
+        list->tail = list->head;
+        return;
+    }
+    while(temp_link->link != NULL){
+        temp_link = temp_link->link;
+    }
+    list->tail = temp_link;
+}
+
 template <class list_type, class type>
 void push_node_to_list(list_type list, type x){
-
     x.set_cgpa(round((x.get_cgpa()*10))/10);
     Link<type> * new_link = new Link<type>;
     new_link->student = x;
     new_link->link = list->head;
     list->head = new_link;
 }
+template <class type>
+type *MergeSorted(type *link1, type *link2, int mode)
+{
 
-Link<DomesticStudent> *MergeSorted(Link<DomesticStudent> *link1, Link<DomesticStudent> *link2){
-
-    Link<DomesticStudent> *result = NULL;
+    type *result = NULL;
 
     if (link1 == NULL)
     {
@@ -74,18 +88,18 @@ Link<DomesticStudent> *MergeSorted(Link<DomesticStudent> *link1, Link<DomesticSt
         return link1;
     }
 
-
-    
+    if (mode == 1)
+    {
         int research_compare = compareResearchScore(link1->student, link2->student);
         if (research_compare == 1)
         {
             result = link1;
-            result->link = MergeSorted(link1->link, link2);
+            result->link = MergeSorted(link1->link, link2, 1);
         }
         else if (research_compare == -1)
         {
             result = link2;
-            result->link = MergeSorted(link1, link2->link);
+            result->link = MergeSorted(link1, link2->link, 1);
         }
         else if (research_compare == 0)
         {
@@ -93,29 +107,29 @@ Link<DomesticStudent> *MergeSorted(Link<DomesticStudent> *link1, Link<DomesticSt
             if (cgpa_compare == 1)
             {
                 result = link1;
-                result->link = MergeSorted(link1->link, link2);
+                result->link = MergeSorted(link1->link, link2, 1);
             }
             else if (cgpa_compare == -1)
             {
                 result = link2;
-                result->link = MergeSorted(link1, link2->link);
+                result->link = MergeSorted(link1, link2->link, 1);
             }
             else if (cgpa_compare == 0)
             {
-                int province_compare = compareProvince(link1->student, link2->student);
+                int province_compare = compareLocation(link1->student, link2->student);
                 if (province_compare < 0)
                 {
                     result = link1;
-                    result->link = MergeSorted(link1->link, link2);
+                    result->link = MergeSorted(link1->link, link2, 1);
                 }
                 else if (province_compare > 0)
                 {
                     result = link2;
-                    result->link = MergeSorted(link1, link2->link);
+                    result->link = MergeSorted(link1, link2->link, 1);
                 }
             }
         }
-    
+    }
     return result;
 }
 
@@ -160,50 +174,92 @@ void MergeSort(type **thead)
     MergeSort(&ptr1);
     MergeSort(&ptr2);
 
-    *thead = MergeSorted(ptr1, ptr2);
+    *thead = MergeSorted(ptr1, ptr2, 1);
+}
+
+template<class list_type, class link_type>
+int GetSize(list_type list){
+    int counter = 0;
+    Link<link_type> * temp = list.head;
+    while(temp != NULL){
+        counter ++;
+        temp = temp->link;
+    }
+
+    return counter;
 }
 
 template <class list_type, class link_type>
-void deleteNode(list_type list, int position)
-{
-    Link<link_type> *temp = list.head;
-    // If linked list is empty
-    if (list.head == NULL)
-    {
+void deleteNode(list_type & list, int position){ // VALIDATING TOEFL DOESN'T WORK WITH CURRENT METHOD
+    int size = 0;
+    int counter = 1;
+    size = GetSize<list_type, link_type>(list) - 1;
+    if(position == 0){
+        list.RemoveHead();
         return;
     }
-    // If head needs to be removed
-    if (position == 0)
-    {
+    if(position == size){
+        list.RemoveTail();
+    }
+    if(size > 1 && position != size){
+        Link<link_type> * node_to_delete = list.head->link;
+        Link<link_type> * previous = list.head;
+        while(node_to_delete != NULL){
+            if(counter == position){
+                break;
+            }
+            previous = node_to_delete;
+            node_to_delete = node_to_delete->link;
+            counter++;
+        }
 
-        // Change head
-        list.head = temp->link;
-
-        // Free old head
-        free(temp);
-        return;
+        previous->link = node_to_delete->link;
+        free(node_to_delete);
     }
 
-    // Find previous node of the node to be deleted
-    for (int i = 0; temp != NULL && i < position - 1; i++)
-    {
-        temp = temp->link;
-    }
-    // If position is more than number of nodes
-    if (temp == NULL || temp->link == NULL)
-    {
-        return;
-    }
-    // Node temp->next is the node to be deleted
-    // Store pointer to the next of node to be deleted
-    Link<link_type> *next = temp->link->link;
 
-    // Unlink the node from linked list
-    free(temp->link); // Free memory
-
-    // Unlink the deleted node from list
-    temp->link = next;
 }
+
+
+// template <class list_type, class link_type>
+// void deleteNode(list_type list, int position)
+// {
+//     Link<link_type> *temp = list.head;
+//     // If linked list is empty
+//     if (list.head == NULL)
+//     {
+//         return;
+//     }
+//     // If head needs to be removed
+//     if (position == 0)
+//     {
+//         // Change head
+//         list.head = temp->link;
+//         // Free old head
+//         free(temp);
+//         return;
+//     }
+
+//     // Find previous node of the node to be deleted
+//     for (int i = 0; temp != NULL && i < position - 1; i++)
+//     {
+//         temp = temp->link;
+//     }
+//     // If position is more than number of nodes
+//     if (temp == NULL || temp->link == NULL)
+//     {
+//         return;
+//     }
+//     // Node temp->next is the node to be deleted
+//     // Store pointer to the next of node to be deleted
+//     Link<link_type> *next = temp->link->link;
+
+//     // Unlink the node from linked list
+//     free(temp->link); // Free memory
+
+//     // Unlink the deleted node from list
+//     temp->link = next;
+// }
 
 template <class list_type, class link_type>
 void SearchID(list_type list, int id)
@@ -263,7 +319,7 @@ void SearchScore(list_type list, float score)
     }
 }
 template <class list_type, class link_type>
-void SearchName(list_type list, string name, bool remove)
+void SearchName(list_type & list, string name, bool remove)
 {
     int counter = 0;
     int index = 0;
@@ -274,7 +330,7 @@ void SearchName(list_type list, string name, bool remove)
     to_lowercase(lower_name);
     remove_space(lower_name);
 
-    cout << lower_name;
+    cout << endl << "Matching Students: ";
 
     Link<link_type> *temp_link = list.head;
     while (temp_link != NULL)

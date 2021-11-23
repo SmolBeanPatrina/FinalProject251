@@ -56,6 +56,7 @@ class DomesticStudent : public Student {
 
     string get_province() const;
     friend int compareProvince(const DomesticStudent &stu1, const DomesticStudent &stu2);
+    friend int compareLocation(const DomesticStudent &stu1, const DomesticStudent &stu2);
     void set_province(string _province);
     friend ostream& operator <<(ostream& outs, DomesticStudent& stu);
 };
@@ -79,6 +80,7 @@ class InternationalStudent : public Student {
     void set_toefl(int _reading, int _listening, int _speaking, int _writing);
     friend ostream& operator <<(ostream& outs, InternationalStudent& stu);
     friend int compareCountry(const InternationalStudent &stu1, const InternationalStudent &stu2);
+    friend int compareLocation(const InternationalStudent &stu1, const InternationalStudent &stu2);
     int* get_toefl();
 };
 

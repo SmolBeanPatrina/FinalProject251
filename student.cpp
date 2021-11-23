@@ -162,7 +162,22 @@ int compareProvince(const DomesticStudent& stu1, const DomesticStudent& stu2){
 
     return temp_stu1.compare(temp_stu2);
 }
+int compareLocation(const DomesticStudent &stu1, const DomesticStudent &stu2){
+	string temp_stu1 = stu1.province;
+	to_lowercase(temp_stu1);
+	string temp_stu2 = stu2.province;
+	to_lowercase(temp_stu2);
 
+    return temp_stu1.compare(temp_stu2);
+}
+int compareLocation(const InternationalStudent &stu1, const InternationalStudent &stu2){
+	string temp_stu1 = stu1.country;
+	to_lowercase(temp_stu1);
+	string temp_stu2 = stu2.country;
+	to_lowercase(temp_stu2);
+
+    return temp_stu1.compare(temp_stu2);
+}
 int compareCountry(const InternationalStudent& stu1, const InternationalStudent& stu2){
     string temp_stu1 = stu1.country;
 	to_lowercase(temp_stu1);
