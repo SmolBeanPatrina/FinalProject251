@@ -7,7 +7,8 @@ using namespace std; //use namespace std
 #include <ostream>
 #include <iomanip>
 
-
+void to_lowercase(string &s);
+void remove_space(string &s);
 
 class Student {
   protected:

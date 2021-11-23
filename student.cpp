@@ -130,8 +130,20 @@ int compareResearchScore(const Student&stu1, const Student&stu2){
 
 }
 
+void remove_space(string &s){
+	int counter = 0;
+	
+	for(auto & c: s){
+		if (c == ' '){
+			s.erase(counter, 1);
+		}
+
+		counter += 1;
+	}
+}
+
 void to_lowercase(string &s){
-	for (auto & c: s) c = (char)toupper(c);
+	for (auto & c: s) c = (char)tolower(c);
 }
 
 //Function that compares First Names of two students 
@@ -152,7 +164,12 @@ int compareProvince(const DomesticStudent& stu1, const DomesticStudent& stu2){
 }
 
 int compareCountry(const InternationalStudent& stu1, const InternationalStudent& stu2){
-    return stu2.get_country().compare(stu1.get_country());
+    string temp_stu1 = stu1.country;
+	to_lowercase(temp_stu1);
+	string temp_stu2 = stu2.country;
+	to_lowercase(temp_stu2);
+
+    return temp_stu1.compare(temp_stu2);
 }
 
 //Function that compares Last Names of two students 
@@ -185,8 +202,8 @@ ostream& operator<<(ostream& outs, DomesticStudent& stu)
 //Function that overloads the << operator. This is for international students
 ostream& operator<<(ostream& outs, InternationalStudent& stu)
 {
-	outs << std::fixed << std::showpoint;
-    outs << std::setprecision(1);
+	// outs << std::fixed << std::showpoint;
+    // outs << std::setprecision(1);
 	outs << "\n\nStudent: " << stu.get_fname() << " " << stu.get_lname() << "(" << stu.get_appid() << "). ";
 	outs << "CGPA: " << stu.get_cgpa(); 
 	outs << ". Reasearch Score: " << stu.get_res_score();

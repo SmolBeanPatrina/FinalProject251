@@ -1,5 +1,6 @@
 #include "list.hpp"
 #include <iostream>
+#include <cmath>
 
 DSLinkedList::DSLinkedList(){
     head = NULL;
@@ -17,16 +18,11 @@ void DSLinkedList::print(){
 }
 
 void DSLinkedList::AddNode(DomesticStudent x){
-    Link<DomesticStudent> * tmp = new Link<DomesticStudent>;
-    tmp->student = x;
-    tmp->link = nullptr;
-    if(head == NULL){
-        head = tmp;
-        tail = tmp;
-    }
-    else{
-        tail->link = tmp;
-        tail = tail->link;
-    }
+
+    x.set_cgpa(round((x.get_cgpa()*10))/10);
+    Link<DomesticStudent> * new_link = new Link<DomesticStudent>;
+    new_link->student = x;
+    new_link->link = head;
+    head = new_link;
 }
 

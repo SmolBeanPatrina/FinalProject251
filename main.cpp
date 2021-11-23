@@ -52,14 +52,23 @@ int main()
 
         domestic_students.AddNode(temp_student);
 
+        MergeSort(&domestic_students.head);
+        
         stu_count++;
     }
 
+    
     domesticFile.close();
+    // domestic_students.print();
 
-    MergeSort(&domestic_students.head);
+
+    SearchName<DSLinkedList, DomesticStudent>(domestic_students, "Dylan asdsdBarnes", true);
+    // deleteNode<DSLinkedList, DomesticStudent>(domestic_students, 1);
+    cout << "--------------------";
 
     domestic_students.print();
 
     return 0;
+
+
 }

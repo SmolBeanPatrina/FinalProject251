@@ -1,6 +1,8 @@
 #ifndef list_hpp
 
 #include "student.hpp"
+#include <iostream>
+#include <vector>
 
 template <class type>
 void SwapLinks(type &s1, type &s2)
@@ -128,6 +130,150 @@ void MergeSort(type **thead)
     MergeSort(&ptr2);
 
     *thead = MergeSorted(ptr1, ptr2, 1);
+}
+
+template <class list_type, class link_type>
+void deleteNode(list_type list, int position)
+{
+    Link<link_type> *temp = list.head;
+    // If linked list is empty
+    if (list.head == NULL)
+    {
+        return;
+    }
+    // If head needs to be removed
+    if (position == 0)
+    {
+
+        // Change head
+        list.head = temp->link;
+
+        // Free old head
+        free(temp);
+        return;
+    }
+
+    // Find previous node of the node to be deleted
+    for (int i = 0; temp != NULL && i < position - 1; i++)
+    {
+        temp = temp->link;
+    }
+    // If position is more than number of nodes
+    if (temp == NULL || temp->link == NULL)
+    {
+        return;
+    }
+    // Node temp->next is the node to be deleted
+    // Store pointer to the next of node to be deleted
+    Link<link_type> *next = temp->link->link;
+
+    // Unlink the node from linked list
+    free(temp->link); // Free memory
+
+    // Unlink the deleted node from list
+    temp->link = next;
+}
+
+template <class list_type, class link_type>
+void SearchID(list_type list, int id)
+{
+    int counter = 0;
+    Link<link_type> *temp_link = list.head;
+    while (temp_link != NULL)
+    {
+        if (temp_link->student.get_appid() == id)
+        {
+            cout << temp_link->student;
+            counter += 1;
+        }
+        temp_link = temp_link->link;
+    }
+    if (counter == 0)
+    {
+        cout << "\nNo matching students\n";
+    }
+}
+template <class list_type, class link_type>
+void SearchCGPA(list_type list, float cgpa)
+{
+    int counter = 0;
+    Link<link_type> *temp_link = list.head;
+    while (temp_link != NULL)
+    {
+        if (temp_link->student.get_cgpa() == cgpa)
+        {
+            cout << temp_link->student;
+            counter += 1;
+        }
+        temp_link = temp_link->link;
+    }
+    if (counter == 0)
+    {
+        cout << "\nNo matching students\n";
+    }
+}
+template <class list_type, class link_type>
+void SearchScore(list_type list, float score)
+{
+    int counter = 0;
+    Link<link_type> *temp_link = list.head;
+    while (temp_link != NULL)
+    {
+        if (temp_link->student.get_res_score() == score)
+        {
+            cout << temp_link->student;
+            counter += 1;
+        }
+        temp_link = temp_link->link;
+    }
+    if (counter == 0)
+    {
+        cout << "\nNo matching students\n";
+    }
+}
+template <class list_type, class link_type>
+void SearchName(list_type list, string name, bool remove)
+{
+    int counter = 0;
+    int index = 0;
+
+    vector<int> to_remove;
+
+    string lower_name = name;
+    to_lowercase(lower_name);
+    remove_space(lower_name);
+
+    cout << lower_name;
+
+    Link<link_type> *temp_link = list.head;
+    while (temp_link != NULL)
+    {
+        string stu_name = (temp_link->student.get_fname() + temp_link->student.get_lname());
+        to_lowercase(stu_name);
+        remove_space(stu_name);
+
+        if (lower_name == stu_name)
+        {
+            cout << temp_link->student;
+
+            to_remove.push_back(index);
+
+            counter++;
+        }
+        index++;
+        temp_link = temp_link->link;
+    }
+    if (counter == 0)
+    {
+        cout << "\nNo matching students\n";
+    }
+    if (remove)
+    {
+        for (auto x : to_remove)
+        {
+            deleteNode<list_type, link_type>(list, x);
+        }
+    }
 }
 
 #endif
