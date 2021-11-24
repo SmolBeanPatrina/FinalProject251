@@ -19,6 +19,9 @@
   - searching can be done using 3 different templates
   - the basic format is as follows: `SearchMethod<ListType, LinkType>(list, parameter)` where `SearchMethod` should be replaced with one of the Search functions `SearchID`, `SearchCGPA`, `SearchScore`, or `SearchName` and `parameter` should be replaced with the value you want. 
   - `SearchName` takes another argument: `SearchName<ListType, LinkType>(list, parameter, remove)` where remove is a bool, that when true will delete the found students
+- Creating a merged list
+  - simply call the `SLinkedList` constructor which will automatically make the new SLinkedList a sorted and merged version of a `DSLinkedList` and a `ISLinkedList`.
+  - eg  `SLinkedList students(domestic_students, international_students`
 
 ## Left To Do
 
