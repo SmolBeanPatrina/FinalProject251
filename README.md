@@ -15,7 +15,18 @@
   - currently, deleting only works by index by calling the `deleteNode` template function, which is used like
     `deleteNode<ListType, LinkType>(list, index)` where `ListType` can be any of the list types above (eg.            DSLinkedList), LinkType is the related student to the list (eg. when deleting from a DSLinkedList, LinkType is    `DomesticStudent`), `list` is the linked list you'd like to delete from, and `index` is which node you'd like      to delete
   - deleting can also be done through the `SearchName` function
-Searching
+- Searching
+  - searching can be done using 3 different templates
+  - the basic format is as follows: `SearchMethod<ListType, LinkType>(list, parameter)` where `SearchMethod` should be replaced with one of the Search functions `SearchID`, `SearchCGPA`, `SearchScore`, or `SearchName` and `parameter` should be replaced with the value you want. 
+  - `SearchName` takes another argument: `SearchName<ListType, LinkType>(list, parameter, remove)` where remove is a bool, that when true will delete the found students
+
+## Left To Do
+
+- filtering and printing for the Student list, although will be very similar to previous functions
+- error checking  -> lots to do
+- unit test
+- innovation marks
+- slides  -> should probably start before
   
 
 
