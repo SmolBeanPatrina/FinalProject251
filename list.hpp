@@ -5,12 +5,29 @@
 #include <iostream>
 #include <vector>
 
+
 template <class type>
 struct Link // Basic Structure for the link in the linked lists, a template to allow use in all lists
 {
     type student;
     Link<type> *link;
 };
+
+
+
+struct student_data // as struct to hold the students' info when merging lists
+{
+    string first_name;    //General student Information
+    string last_name;
+    float CGPA;
+    int research_score;
+    string home_location;
+    int orig_type;
+    int app_id;
+};
+
+void merge_sort(vector<student_data>& in_vect); // alt merge sort for vectors, used in the merged list 
+void merge(vector<student_data>& left, vector<student_data>& right, vector<student_data>& results);
 
 
 class DSLinkedList
@@ -50,6 +67,7 @@ class SLinkedList
 public:
     Link<Student> *head, *tail;
     SLinkedList();
+    SLinkedList(DSLinkedList ds_in, ISLinkedList is_in);
     void Sort();    // Sorting based on interim project (research, cgpa, province)
     void RemoveHead();  // same as DSLinkedList
     void RemoveTail();  // same as DSLinkedList
@@ -59,8 +77,11 @@ public:
     void MergeLists(DSLinkedList DList, ISLinkedList IList);
     template <class list_type, class type>
     friend void push_node_to_list(list_type list, type x);  // same as DSLinkedList
+
+    
 };
 
+void compile_students(DSLinkedList ds_in, ISLinkedList is_in, vector<student_data> &stu_data);
 
 template <class list_type, class link_type>
 void set_tail(list_type *list) // properly sets the tail of a list by finding the last link
@@ -92,8 +113,10 @@ void push_node_to_list(list_type list, type x) // adds a link by placeing it at 
     new_link->link = list->head;    // sets the new student as the head and points to the previous head
     list->head = new_link;
 }
+
+
 template <class type>
-type *MergeSorted(type *link1, type *link2)
+type *MergeSorted(type *link1, type *link2) // the main helper function of the merge sort, actually does the sorting (score -> cgpa -> location). Only for domestic and international lists
 {
     type *result = NULL;
     if (link1 == NULL)
@@ -170,7 +193,7 @@ void SplitList(type *root, type **front, type **back)
 }
 
 template <class type>
-void MergeSort(type **thead)
+void MergeSort(type **thead)    // the main merge sort function that recursively calls itself and the other helper functions
 {
     type *head = *thead;
     type *ptr1;
@@ -187,7 +210,7 @@ void MergeSort(type **thead)
 }
 
 template <class list_type, class link_type>
-int GetSize(list_type list)
+int GetSize(list_type list) // simple helper that returns the size of a list, used in deletion
 {
     int counter = 0;
     Link<link_type> *temp = list.head;
@@ -201,21 +224,21 @@ int GetSize(list_type list)
 }
 
 template <class list_type, class link_type>
-void deleteNode(list_type &list, int position)
+void deleteNode(list_type &list, int position)  //  delete function that deletes based on index
 {
     int size = 0;
     int counter = 1;
     size = GetSize<list_type, link_type>(list) - 1;
-    if (position == 0)
+    if (position == 0)  // if the link to be deleted is 0 (ie the head) then call the remove head helper function
     {
         list.RemoveHead();
         return;
     }
-    if (position == size)
+    if (position == size)   //  if the position is the size of the list (ie the tail) then use the remove tail helper function
     {
         list.RemoveTail();
     }
-    if (size > 1 && position != size)
+    if (size > 1 && position != size)   // otherwise find the link to be deleted and appropriately set the nearby links
     {
         Link<link_type> *node_to_delete = list.head->link;
         Link<link_type> *previous = list.head;
@@ -235,7 +258,7 @@ void deleteNode(list_type &list, int position)
 }
 
 template <class list_type, class link_type>
-void SearchID(list_type list, int id)
+void SearchID(list_type list, int id)   // searches a given list for a given id and then prints out the information of that student
 {
     int counter = 0;
     Link<link_type> *temp_link = list.head;
@@ -253,8 +276,9 @@ void SearchID(list_type list, int id)
         cout << "\nNo matching students\n";
     }
 }
+
 template <class list_type, class link_type>
-void SearchCGPA(list_type list, float cgpa)
+void SearchCGPA(list_type list, float cgpa) // searches a given list for a given cgpa and then prints out the information of that student
 {
     int counter = 0;
     Link<link_type> *temp_link = list.head;
@@ -273,7 +297,7 @@ void SearchCGPA(list_type list, float cgpa)
     }
 }
 template <class list_type, class link_type>
-void SearchScore(list_type list, float score)
+void SearchScore(list_type list, float score)   // searches a given list for a given research score and then prints out the information of that student
 {
     int counter = 0;
     Link<link_type> *temp_link = list.head;
@@ -292,8 +316,8 @@ void SearchScore(list_type list, float score)
     }
 }
 template <class list_type, class link_type>
-void SearchName(list_type &list, string name, bool remove)
-{
+void SearchName(list_type &list, string name, bool remove)  // searches a given list for a given name and then prints out the information of that student. Also deletes if remove is true. 
+{                                                           // case and space insensitive
     int counter = 0;
     int index = 0;
 
@@ -336,5 +360,4 @@ void SearchName(list_type &list, string name, bool remove)
         }
     }
 }
-
 #endif

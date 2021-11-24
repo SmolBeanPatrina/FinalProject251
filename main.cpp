@@ -13,7 +13,7 @@ int main()
     ifstream domesticFile("domestic-stu.txt");
     if (!domesticFile.is_open())
     {
-        cout << "Unable to open file domestic-stu.txt" << endl;
+        std::cout << "Unable to open file domestic-stu.txt" << endl;
         return -1;
     }
 
@@ -124,8 +124,6 @@ int main()
     domestic_students.Sort();
 
     domestic_students.print();
-    
-    domestic_students.RemoveTail();
 
     InternationalFile.close();
 
@@ -133,11 +131,14 @@ int main()
 
     intern_students.print();
 
-    SLinkedList students;
-
-    students.MergeLists(domestic_students, intern_students);
+    SLinkedList students(domestic_students, intern_students);
     
     students.print();
+
+
+    int x;
+
+    std::cin >> x;
 
     return 0;
 }
