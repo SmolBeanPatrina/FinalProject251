@@ -121,19 +121,14 @@ int main()
         stu_count++;
     }
 
-    domestic_students.Sort();
+    RemoveHeadTail(domestic_students);
 
-    domestic_students.print();
-
-    InternationalFile.close();
-
-    intern_students.Sort();
-
-    intern_students.print();
 
     SLinkedList students(domestic_students, intern_students);
     
     students.print();
+
+    FilterCGPA<SLinkedList, Student>(students, 3.5);
 
 
     int x;

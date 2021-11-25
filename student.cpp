@@ -217,9 +217,12 @@ int compareLastName(const Student&stu1, const Student&stu2){
 //Function that the << operator 
 ostream& operator<<(ostream& outs, Student& stu)
 {
-	outs << "\n\nStudent: " << stu.get_fname() << " " << stu.get_lname() << endl; //puts name in outs stream
-	outs << "CGPA: " << stu.get_cgpa() << endl;                                   //puts CGPA in outs stream (float value)
-	outs << "Research Score " << stu.get_res_score() << endl;                     //puts research score in outs stream (int)
+	outs << std::fixed << std::showpoint;
+    outs << std::setprecision(1);
+	outs << "\n\nStudent: " << stu.get_fname() << " " << stu.get_lname() << "(" << stu.get_appid() << "). ";  //puts name and student # in outs stream
+	outs << "CGPA: " << stu.get_cgpa();                     //puts CGPA in outs stream (float value)
+	outs << ". Reasearch Score: " << stu.get_res_score();   //puts research score in outs stream (int)
+
   return outs;
 }
 //Function that overloads the << operator. This is for domestic students
@@ -240,8 +243,8 @@ bool Student::valid_toefl() { return true; }
 //Function that overloads the << operator. This is for international students
 ostream& operator<<(ostream& outs, InternationalStudent& stu)
 {
-	// outs << std::fixed << std::showpoint;
-    // outs << std::setprecision(1);
+	outs << std::fixed << std::showpoint;
+    outs << std::setprecision(1);
 	outs << "\n\nStudent: " << stu.get_fname() << " " << stu.get_lname() << "(" << stu.get_appid() << "). ";
 	outs << "CGPA: " << stu.get_cgpa(); 
 	outs << ". Reasearch Score: " << stu.get_res_score();

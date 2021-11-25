@@ -6,6 +6,7 @@
 #include <vector>
 
 
+
 template <class type>
 struct Link // Basic Structure for the link in the linked lists, a template to allow use in all lists
 {
@@ -297,6 +298,25 @@ void SearchCGPA(list_type list, float cgpa) // searches a given list for a given
     }
 }
 template <class list_type, class link_type>
+void FilterCGPA(list_type list, float cgpa) // searches a given list for a given cgpa and then prints out the information of that student
+{
+    int counter = 0;
+    Link<link_type> *temp_link = list.head;
+    while (temp_link != NULL)
+    {
+        if (temp_link->student.get_cgpa() >= cgpa)
+        {
+            cout << temp_link->student;
+            counter += 1;
+        }
+        temp_link = temp_link->link;
+    }
+    if (counter == 0)
+    {
+        cout << "\nNo matching students\n";
+    }
+}
+template <class list_type, class link_type>
 void SearchScore(list_type list, float score)   // searches a given list for a given research score and then prints out the information of that student
 {
     int counter = 0;
@@ -304,6 +324,25 @@ void SearchScore(list_type list, float score)   // searches a given list for a g
     while (temp_link != NULL)
     {
         if (temp_link->student.get_res_score() == score)
+        {
+            cout << temp_link->student;
+            counter += 1;
+        }
+        temp_link = temp_link->link;
+    }
+    if (counter == 0)
+    {
+        cout << "\nNo matching students\n";
+    }
+}
+template <class list_type, class link_type>
+void FilterScore(list_type list, float score)   // searches a given list for a given research score and then prints out the information of that student
+{
+    int counter = 0;
+    Link<link_type> *temp_link = list.head;
+    while (temp_link != NULL)
+    {
+        if (temp_link->student.get_res_score() >= score)
         {
             cout << temp_link->student;
             counter += 1;
@@ -360,4 +399,11 @@ void SearchName(list_type &list, string name, bool remove)  // searches a given 
         }
     }
 }
+
+template <class list_type>
+void RemoveHeadTail(list_type &list){
+    list.RemoveHead();
+    list.RemoveTail();
+}
+
 #endif
